@@ -129,11 +129,11 @@ sed -i 's/#deprecation_warnings = True/deprecation_warnings = False/g' /etc/ansi
 
 qs_retry_command 50 ansible -m ping all
 
-ansible-playbook /usr/share/ansible/openshift-ansible/bootstrap_wrapper.yml > /var/log/bootstrap.log
-ansible-playbook /usr/share/ansible/openshift-ansible/playbooks/prerequisites.yml >> /var/log/bootstrap.log
-ansible-playbook /usr/share/ansible/openshift-ansible/playbooks/deploy_cluster.yml >> /var/log/bootstrap.log
+ansible-playbook -vvv /usr/share/ansible/openshift-ansible/bootstrap_wrapper.yml > /var/log/bootstrap.log
+ansible-playbook -vvv /usr/share/ansible/openshift-ansible/playbooks/prerequisites.yml >> /var/log/bootstrap.log
+ansible-playbook -vvv /usr/share/ansible/openshift-ansible/playbooks/deploy_cluster.yml >> /var/log/bootstrap.log
 
-ansible masters -a "htpasswd -b /etc/origin/master/htpasswd admin ${OCP_PASS}"
+ansible -vvv masters -a "htpasswd -b /etc/origin/master/htpasswd admin ${OCP_PASS}"
 aws autoscaling resume-processes --auto-scaling-group-name ${OPENSHIFTMASTERASG} --scaling-processes HealthCheck --region ${AWS_REGION}
 
 qs_retry_command 10 yum install -y atomic-openshift-clients
